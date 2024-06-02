@@ -1,5 +1,7 @@
 ﻿using Core.Common;
+using Core.Domain.Accounts.Models;
 using Core.Domain.PostComments.Data;
+using Core.Domain.Posts.Models;
 
 namespace Core.Domain.PostComments.Models;
 
@@ -14,6 +16,10 @@ public class PostComment : Entity
     public string Content { get; private set; }
     
     public DateTime CreatedDate { get; private set; }
+
+    public Account User { get; private set; }
+    
+    public Post Post { get; private set; }
     
     private PostComment(long id, long postId, Guid userId, string content, DateTime createdDate)
     {

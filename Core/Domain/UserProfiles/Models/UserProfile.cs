@@ -1,4 +1,5 @@
 ﻿using Core.Common;
+using Core.Domain.Accounts.Models;
 using Core.Domain.UserProfiles.Data;
 
 namespace Core.Domain.UserProfiles.Models;
@@ -16,6 +17,8 @@ public class UserProfile : Entity
     public DateTime? BirthdayDate { get; private set; }
 
     public string? Bio { get; private set; }
+
+    public Account Account { get; private set; }
     
     private UserProfile(Guid accountId, string firstName, string lastName, string middleName, DateTime? birthdayDate, string bio)
     {

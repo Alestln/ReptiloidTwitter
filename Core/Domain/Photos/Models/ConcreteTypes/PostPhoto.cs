@@ -1,12 +1,15 @@
 ﻿using Core.Domain.Photos.Data;
 using Core.Domain.Photos.Enums;
 using Core.Domain.Photos.Models.Abstractions;
+using Core.Domain.Posts.Models;
 
 namespace Core.Domain.Photos.Models.ConcreteTypes;
 
 public class PostPhoto : Photo
 {
     public long PostId { get; private set; }
+
+    public Post Post { get; private set; }
 
     public PostPhoto(Guid id, long postId, string filePath, DateTime uploadDate) 
         : base(id, filePath, uploadDate, PhotoType.Post)
