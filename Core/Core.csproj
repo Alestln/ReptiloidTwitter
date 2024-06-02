@@ -11,9 +11,4 @@
       <PackageReference Include="MediatR" Version="12.2.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Domain\UserProfiles\Data\" />
-      <Folder Include="Domain\UserProfiles\Models\" />
-    </ItemGroup>
-
 </Project>
