@@ -1,8 +1,9 @@
-﻿using Core.Domain.UserProfiles.Data;
+﻿using Core.Common;
+using Core.Domain.UserProfiles.Data;
 
 namespace Core.Domain.UserProfiles.Models;
 
-public class UserProfile
+public class UserProfile : Entity
 {
     public Guid AccountId { get; private set; }
 
