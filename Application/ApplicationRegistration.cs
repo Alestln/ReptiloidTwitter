@@ -8,9 +8,9 @@ public static class ApplicationRegistration
 {
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(cfg =>
+        services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        //services.AddAutoMapper(typeof().Assembly);
     }
 }

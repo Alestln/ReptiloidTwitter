@@ -1,3 +1,6 @@
+using Application;
+using Persistence;
+
 namespace ReptiloidTwitter;
 
 public class Program
@@ -8,6 +11,9 @@ public class Program
 
         builder.Services.AddControllers();
 
+        builder.Services.AddApplicationServices(builder.Configuration);
+        builder.Services.AddPersistenceServices(builder.Configuration);
+        
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
