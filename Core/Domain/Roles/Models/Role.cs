@@ -1,6 +1,8 @@
-﻿namespace Core.Domain.Roles.Models;
+﻿using Core.Common;
 
-public class Role
+namespace Core.Domain.Roles.Models;
+
+public class Role : Entity
 {
     public int Id { get; private set; }
 
