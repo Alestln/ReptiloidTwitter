@@ -6,4 +6,5 @@ public record CreateUserProfileData(
     string LastName, 
     string MiddleName, 
     DateTime? BirthdayDate, 
-    string Bio);
+    string Bio,
+    Guid AvatarId);

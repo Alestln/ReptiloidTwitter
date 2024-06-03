@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.Domain.Accounts.Models;
+using Core.Domain.Photos.Models;
 using Core.Domain.UserProfiles.Data;
 
 namespace Core.Domain.UserProfiles.Models;
@@ -18,9 +19,20 @@ public class UserProfile : Entity
 
     public string? Bio { get; private set; }
 
-    public Account Account { get; private set; }
+    public Guid? AvatarId { get; set; }
     
-    private UserProfile(Guid accountId, string firstName, string lastName, string middleName, DateTime? birthdayDate, string bio)
+    public Account Account { get; private set; }
+
+    public Photo Avatar { get; set; }
+    
+    private UserProfile(
+        Guid accountId,
+        string firstName,
+        string lastName,
+        string? middleName = null,
+        DateTime? birthdayDate = null,
+        string? bio = null,
+        Guid? avatarId = null)
     {
         AccountId = accountId;
         FirstName = firstName;
@@ -28,6 +40,7 @@ public class UserProfile : Entity
         MiddleName = middleName;
         BirthdayDate = birthdayDate;
         Bio = bio;
+        AvatarId = avatarId;
     }
 
     public static UserProfile Create(CreateUserProfileData data)
@@ -38,6 +51,7 @@ public class UserProfile : Entity
             lastName: data.LastName,
             middleName: data.MiddleName,
             birthdayDate: data.BirthdayDate,
-            bio: data.Bio);
+            bio: data.Bio,
+            avatarId: data.AvatarId);
     }
 }
