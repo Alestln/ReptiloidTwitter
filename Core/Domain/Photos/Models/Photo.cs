@@ -10,7 +10,7 @@ public class Photo : Entity
     
     public DateTime UploadDate { get; private set; }
 
-    public Photo(Guid id, string filePath, DateTime uploadDate)
+    private Photo(Guid id, string filePath, DateTime uploadDate)
     {
         Id = id;
         FilePath = filePath;

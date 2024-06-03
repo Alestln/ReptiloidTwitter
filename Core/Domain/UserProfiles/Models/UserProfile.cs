@@ -19,11 +19,13 @@ public class UserProfile : Entity
 
     public string? Bio { get; private set; }
 
-    public Guid? AvatarId { get; set; }
+    public Guid? AvatarId { get; private set; }
     
     public Account Account { get; private set; }
 
-    public Photo Avatar { get; set; }
+    public Photo Avatar { get; private set; }
+
+    public ICollection<UserProfile> Friends { get; private set; }
     
     private UserProfile(
         Guid accountId,

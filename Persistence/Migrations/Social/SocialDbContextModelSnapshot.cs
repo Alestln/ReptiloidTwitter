@@ -67,6 +67,24 @@ namespace Persistence.Migrations.Social
                     b.ToTable("Photos", "Social");
                 });
 
+            modelBuilder.Entity("Core.Domain.UserProfiles.Models.Friendship", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FriendId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("Friendship", "Social", t =>
+                        {
+                            t.HasCheckConstraint("CHK_Friendship_UserId_FriendId", "\"UserId\" != \"FriendId\"");
+                        });
+                });
+
             modelBuilder.Entity("Core.Domain.UserProfiles.Models.UserProfile", b =>
                 {
                     b.Property<Guid>("AccountId")
@@ -97,6 +115,25 @@ namespace Persistence.Migrations.Social
                     b.HasIndex("AvatarId");
 
                     b.ToTable("UserProfiles", "Social");
+                });
+
+            modelBuilder.Entity("Core.Domain.UserProfiles.Models.Friendship", b =>
+                {
+                    b.HasOne("Core.Domain.UserProfiles.Models.UserProfile", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.UserProfiles.Models.UserProfile", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Domain.UserProfiles.Models.UserProfile", b =>

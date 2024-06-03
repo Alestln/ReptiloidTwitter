@@ -23,5 +23,24 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             .WithMany()
             .HasForeignKey(u => u.AvatarId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder
+            .HasMany(u => u.Friends)
+            .WithMany()
+            .UsingEntity<Friendship>(
+                f => f
+                    .HasOne(fr => fr.User)
+                    .WithMany()
+                    .HasForeignKey(fr => fr.UserId),
+                f => f
+                    .HasOne(fr => fr.Friend)
+                    .WithMany()
+                    .HasForeignKey(fr => fr.FriendId),
+                f =>
+                {
+                    f.HasKey(fr => new { fr.UserId, fr.FriendId });
+                    f.ToTable(tb =>
+                        tb.HasCheckConstraint("CHK_Friendship_UserId_FriendId", "\"UserId\" != \"FriendId\""));
+                });
     }
 }
