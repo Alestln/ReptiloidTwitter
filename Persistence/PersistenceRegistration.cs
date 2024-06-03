@@ -15,42 +15,6 @@ public static class PersistenceRegistration
                                ?? throw new AggregateException(
                                    $"Connection string '{ConnectionStringName}' is not found in configurations.");
         
-        services.AddDbContext<IdentityDbContext>(options =>
-        {
-            options.UseNpgsql(
-                connectionString,
-                npgsqlOptions =>
-                {
-                    npgsqlOptions.MigrationsHistoryTable(
-                        IdentityDbContext.DbMigrationsHistoryTable,
-                        IdentityDbContext.DbSchema);
-                });
-        });
-
-        services.AddDbContext<AuthorizationDbContext>(options =>
-        {
-            options.UseNpgsql(
-                connectionString,
-                npgsqlOptions =>
-                {
-                    npgsqlOptions.MigrationsHistoryTable(
-                        AuthorizationDbContext.DbMigrationsHistoryTable,
-                        AuthorizationDbContext.DbSchema);
-                });
-        });
-
-        services.AddDbContext<MediaDbContext>(options =>
-        {
-            options.UseNpgsql(
-                connectionString,
-                npgsqlOptions =>
-                {
-                    npgsqlOptions.MigrationsHistoryTable(
-                        MediaDbContext.DbMigrationsHistoryTable,
-                        MediaDbContext.DbSchema);
-                });
-        });
-
         services.AddDbContext<SocialDbContext>(options =>
         {
             options.UseNpgsql(

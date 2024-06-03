@@ -7,13 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="EntityConfigurations\Authorization\" />
-      <Folder Include="EntityConfigurations\Identity\" />
-      <Folder Include="EntityConfigurations\Media\" />
-      <Folder Include="EntityConfigurations\Social\" />
-      <Folder Include="Migrations\Authorization\" />
-      <Folder Include="Migrations\Identity\" />
-      <Folder Include="Migrations\Media\" />
       <Folder Include="Migrations\Social\" />
     </ItemGroup>
 

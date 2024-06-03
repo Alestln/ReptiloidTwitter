@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Domain.Accounts.Models;
+using Core.Domain.Photos.Models;
+using Core.Domain.UserProfiles.Models;
+using Microsoft.EntityFrameworkCore;
+using Persistence.EntityConfigurations.Social;
 
 namespace Persistence.Contexts;
 
@@ -7,8 +11,16 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
     internal const string DbSchema = "Social";
     internal const string DbMigrationsHistoryTable = "__SocialDbMigrationsHistory";
     
+    public DbSet<Account> Accounts { get; set; }
+
+    public DbSet<UserProfile> UserProfiles { get; set; }
+    
+    public DbSet<Photo> Photos { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(DbSchema);
+        
+        modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
     }
 }
