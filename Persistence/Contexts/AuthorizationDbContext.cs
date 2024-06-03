@@ -10,7 +10,7 @@ public class AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> opt
     internal const string DbMigrationsHistoryTable = "__AuthorizationDbMigrationsHistory";
 
     public DbSet<Role> Roles { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(DbSchema);

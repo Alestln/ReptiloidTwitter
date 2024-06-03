@@ -15,7 +15,7 @@ public static class PersistenceRegistration
                                ?? throw new AggregateException(
                                    $"Connection string '{ConnectionStringName}' is not found in configurations.");
         
-        services.AddDbContext<IdentityDbContext>(options =>
+        /*services.AddDbContext<IdentityDbContext>(options =>
         {
             options.UseNpgsql(
                 connectionString,
@@ -25,8 +25,8 @@ public static class PersistenceRegistration
                         IdentityDbContext.DbMigrationsHistoryTable,
                         IdentityDbContext.DbSchema);
                 });
-        });
-        
+        });*/
+
         services.AddDbContext<AuthorizationDbContext>(options =>
         {
             options.UseNpgsql(
@@ -38,8 +38,8 @@ public static class PersistenceRegistration
                         AuthorizationDbContext.DbSchema);
                 });
         });
-        
-        services.AddDbContext<MediaDbContext>(options =>
+
+        /*services.AddDbContext<MediaDbContext>(options =>
         {
             options.UseNpgsql(
                 connectionString,
@@ -50,7 +50,7 @@ public static class PersistenceRegistration
                         MediaDbContext.DbSchema);
                 });
         });
-        
+
         services.AddDbContext<SocialDbContext>(options =>
         {
             options.UseNpgsql(
@@ -61,6 +61,6 @@ public static class PersistenceRegistration
                         SocialDbContext.DbMigrationsHistoryTable,
                         SocialDbContext.DbSchema);
                 });
-        });
+        });*/
     }
 }

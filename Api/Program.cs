@@ -10,13 +10,13 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
-
-        builder.Services.AddApplicationServices(builder.Configuration);
-        builder.Services.AddPersistenceServices(builder.Configuration);
         
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
+        
+        builder.Services.AddApplicationServices(builder.Configuration);
+        builder.Services.AddPersistenceServices(builder.Configuration);
+        
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
