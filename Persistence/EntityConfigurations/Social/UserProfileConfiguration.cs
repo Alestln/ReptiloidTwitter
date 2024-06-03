@@ -9,6 +9,9 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 {
     public void Configure(EntityTypeBuilder<UserProfile> builder)
     {
+        var userIdPropertyName = nameof(Friendship.UserId);
+        var friendIdPropertyName = nameof(Friendship.FriendId);
+        
         builder
             .HasKey(u => u.AccountId);
 
@@ -38,9 +41,10 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
                     .HasForeignKey(fr => fr.FriendId),
                 f =>
                 {
-                    f.HasKey(fr => new { fr.UserId, fr.FriendId });
+                    f.HasKey(fr => new { fr.UserId, FriendId = fr.FriendId });
                     f.ToTable(tb =>
-                        tb.HasCheckConstraint("CHK_Friendship_UserId_FriendId", "\"UserId\" != \"FriendId\""));
+                        tb.HasCheckConstraint($"CHK_Friendship_{userIdPropertyName}_{friendIdPropertyName}",
+                            $"\"{userIdPropertyName}\" != \"{friendIdPropertyName}\""));
                 });
     }
 }

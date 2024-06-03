@@ -1,6 +1,6 @@
 ﻿using Core.Common;
-using Core.Domain.Accounts.Models;
 using Core.Domain.Posts.Data;
+using Core.Domain.UserProfiles.Models;
 
 namespace Core.Domain.Posts.Models;
 
@@ -14,7 +14,11 @@ public class Post : Entity
     
     public DateTime CreatedAt { get; private set; }
 
-    public Account User { get; private set; }
+    public UserProfile User { get; private set; }
+
+    public ICollection<UserProfile> Likes { get; private set; }
+
+    //public ICollection<PostComment> Comments { get; private set; }
     
     private Post(long id, Guid userId, string content, DateTime createdAt)
     {
