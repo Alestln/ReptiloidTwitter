@@ -1,5 +1,6 @@
 ﻿using Core.Domain.Accounts.Models;
 using Core.Domain.Photos.Models;
+using Core.Domain.Posts.Models;
 using Core.Domain.UserProfiles.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityConfigurations.Social;
@@ -16,6 +17,8 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
     public DbSet<UserProfile> UserProfiles { get; set; }
     
     public DbSet<Photo> Photos { get; set; }
+    
+    public DbSet<Post> Posts { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
