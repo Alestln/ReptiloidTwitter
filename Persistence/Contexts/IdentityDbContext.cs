@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Domain.Accounts.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Contexts;
 
@@ -6,6 +7,8 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
 {
     internal const string DbSchema = "Identity";
     internal const string DbMigrationsHistoryTable = "__IdentityDbMigrationsHistory";
+
+    public DbSet<Account> Accounts { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
