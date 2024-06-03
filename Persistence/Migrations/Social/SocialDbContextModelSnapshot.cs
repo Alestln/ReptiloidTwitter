@@ -67,6 +67,36 @@ namespace Persistence.Migrations.Social
                     b.ToTable("Photos", "Social");
                 });
 
+            modelBuilder.Entity("Core.Domain.PostComments.Models.PostComment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("PostId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostComments", "Social");
+                });
+
             modelBuilder.Entity("Core.Domain.Posts.Models.Post", b =>
                 {
                     b.Property<long>("Id")
@@ -140,6 +170,25 @@ namespace Persistence.Migrations.Social
                     b.HasIndex("AvatarId");
 
                     b.ToTable("UserProfiles", "Social");
+                });
+
+            modelBuilder.Entity("Core.Domain.PostComments.Models.PostComment", b =>
+                {
+                    b.HasOne("Core.Domain.Posts.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.Accounts.Models.Account", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Core.Domain.Posts.Models.Post", b =>

@@ -1,5 +1,6 @@
 ﻿using Core.Domain.Accounts.Models;
 using Core.Domain.Photos.Models;
+using Core.Domain.PostComments.Models;
 using Core.Domain.Posts.Models;
 using Core.Domain.UserProfiles.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
     public DbSet<Photo> Photos { get; set; }
     
     public DbSet<Post> Posts { get; set; }
+    
+    public DbSet<PostComment> PostComments { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
