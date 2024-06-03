@@ -28,6 +28,6 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
         modelBuilder.HasDefaultSchema(DbSchema);
         
         modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
-        //modelBuilder.ApplyConfiguration(new PostConfiguration());
+        modelBuilder.ApplyConfiguration(new PostConfiguration());
     }
 }
