@@ -21,8 +21,6 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
     
     public DbSet<Post> Posts { get; set; }
     
-    public DbSet<PostComment> PostComments { get; set; }
-    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(DbSchema);

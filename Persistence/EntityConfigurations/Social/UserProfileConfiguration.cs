@@ -41,7 +41,7 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
                     .HasForeignKey(fr => fr.FriendId),
                 f =>
                 {
-                    f.HasKey(fr => new { fr.UserId, FriendId = fr.FriendId });
+                    f.HasKey(fr => new { fr.UserId, fr.FriendId });
                     f.ToTable(tb =>
                         tb.HasCheckConstraint($"CHK_Friendship_{userIdPropertyName}_{friendIdPropertyName}",
                             $"\"{userIdPropertyName}\" != \"{friendIdPropertyName}\""));
