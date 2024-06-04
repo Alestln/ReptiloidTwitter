@@ -11,4 +11,11 @@
         <ProjectReference Include="..\Persistence\Persistence.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Domain\" />
+      <Folder Include="Dtos\" />
+      <Folder Include="Mappings\" />
+      <Folder Include="Validators\" />
+    </ItemGroup>
+
 </Project>
