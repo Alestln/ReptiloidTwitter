@@ -16,7 +16,7 @@ public class Account : Entity
 
     public DateTime RegistrationDate  { get; private set; }
     
-    //public ICollection<Role> Roles { get; private set; }
+    public ICollection<Role> Roles { get; private set; }
     
     private Account(Guid id, string username, string password, string email, DateTime registrationDate)
     {

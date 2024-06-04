@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations.Social
 {
     [DbContext(typeof(SocialDbContext))]
-    partial class SocialDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240604192446_Add_PhotosToPostAndUserProfile")]
+    partial class Add_PhotosToPostAndUserProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,38 +155,6 @@ namespace Persistence.Migrations.Social
                     b.ToTable("PostPhoto", "Social");
                 });
 
-            modelBuilder.Entity("Core.Domain.Roles.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Role", "Social");
-                });
-
-            modelBuilder.Entity("Core.Domain.Roles.Models.RoleAccount", b =>
-                {
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AccountId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RoleAccount", "Social");
-                });
-
             modelBuilder.Entity("Core.Domain.UserProfiles.Models.Friendship", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -315,25 +286,6 @@ namespace Persistence.Migrations.Social
                     b.Navigation("Photo");
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("Core.Domain.Roles.Models.RoleAccount", b =>
-                {
-                    b.HasOne("Core.Domain.Accounts.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Domain.Roles.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Core.Domain.UserProfiles.Models.Friendship", b =>
