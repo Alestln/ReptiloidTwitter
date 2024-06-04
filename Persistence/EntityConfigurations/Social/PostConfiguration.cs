@@ -22,5 +22,20 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
                     .HasForeignKey(p => p.PostId),
                 pl =>
                     pl.HasKey(p => new { p.UserId, p.PostId }));
+
+        builder
+            .HasMany(p => p.Photos)
+            .WithMany()
+            .UsingEntity<PostPhoto>(
+                pp => pp
+                    .HasOne(p => p.Photo)
+                    .WithMany()
+                    .HasForeignKey(p => p.PhotoId),
+                pp => pp
+                    .HasOne(p => p.Post)
+                    .WithMany()
+                    .HasForeignKey(p => p.PostId),
+                pp =>
+                    pp.HasKey(t => new { t.PostId, t.PhotoId }));
     }
 }

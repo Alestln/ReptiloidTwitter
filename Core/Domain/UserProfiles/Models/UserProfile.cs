@@ -27,6 +27,8 @@ public class UserProfile : Entity
 
     public ICollection<UserProfile> Friends { get; private set; }
     
+    public ICollection<Photo> Photos { get; private set; }
+    
     private UserProfile(
         Guid accountId,
         string firstName,

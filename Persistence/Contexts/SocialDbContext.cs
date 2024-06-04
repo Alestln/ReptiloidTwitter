@@ -2,6 +2,7 @@
 using Core.Domain.Photos.Models;
 using Core.Domain.PostComments.Models;
 using Core.Domain.Posts.Models;
+using Core.Domain.Roles.Models;
 using Core.Domain.UserProfiles.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityConfigurations.Social;

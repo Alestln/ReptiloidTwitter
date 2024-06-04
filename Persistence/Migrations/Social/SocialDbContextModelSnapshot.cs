@@ -137,6 +137,21 @@ namespace Persistence.Migrations.Social
                     b.ToTable("PostLike", "Social");
                 });
 
+            modelBuilder.Entity("Core.Domain.Posts.Models.PostPhoto", b =>
+                {
+                    b.Property<long>("PostId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("PhotoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PostId", "PhotoId");
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("PostPhoto", "Social");
+                });
+
             modelBuilder.Entity("Core.Domain.UserProfiles.Models.Friendship", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -185,6 +200,21 @@ namespace Persistence.Migrations.Social
                     b.HasIndex("AvatarId");
 
                     b.ToTable("UserProfiles", "Social");
+                });
+
+            modelBuilder.Entity("Core.Domain.UserProfiles.Models.UserProfilePhoto", b =>
+                {
+                    b.Property<Guid>("UserProfileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PhotoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserProfileId", "PhotoId");
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("UserProfilePhoto", "Social");
                 });
 
             modelBuilder.Entity("Core.Domain.PostComments.Models.PostComment", b =>
@@ -236,6 +266,25 @@ namespace Persistence.Migrations.Social
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Core.Domain.Posts.Models.PostPhoto", b =>
+                {
+                    b.HasOne("Core.Domain.Photos.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.Posts.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("Core.Domain.UserProfiles.Models.Friendship", b =>
                 {
                     b.HasOne("Core.Domain.UserProfiles.Models.UserProfile", "Friend")
@@ -271,6 +320,25 @@ namespace Persistence.Migrations.Social
                     b.Navigation("Account");
 
                     b.Navigation("Avatar");
+                });
+
+            modelBuilder.Entity("Core.Domain.UserProfiles.Models.UserProfilePhoto", b =>
+                {
+                    b.HasOne("Core.Domain.Photos.Models.Photo", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.UserProfiles.Models.UserProfile", "UserProfile")
+                        .WithMany()
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Photo");
+
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Core.Domain.Posts.Models.Post", b =>

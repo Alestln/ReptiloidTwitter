@@ -1,4 +1,5 @@
 ﻿using Core.Common;
+using Core.Domain.Photos.Models;
 using Core.Domain.PostComments.Models;
 using Core.Domain.Posts.Data;
 using Core.Domain.UserProfiles.Models;
@@ -20,6 +21,8 @@ public class Post : Entity
     public ICollection<UserProfile> Likes { get; private set; }
 
     public ICollection<PostComment> Comments { get; private set; }
+    
+    public ICollection<Photo> Photos { get; private set; }
     
     private Post(long id, Guid userId, string content, DateTime createdAt)
     {

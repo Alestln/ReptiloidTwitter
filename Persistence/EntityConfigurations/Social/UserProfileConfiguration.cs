@@ -46,5 +46,20 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
                         tb.HasCheckConstraint($"CHK_Friendship_{userIdPropertyName}_{friendIdPropertyName}",
                             $"\"{userIdPropertyName}\" != \"{friendIdPropertyName}\""));
                 });
+        
+        builder
+            .HasMany(p => p.Photos)
+            .WithMany()
+            .UsingEntity<UserProfilePhoto>(
+                up => up
+                    .HasOne(p => p.Photo)
+                    .WithMany()
+                    .HasForeignKey(p => p.PhotoId),
+                up => up
+                    .HasOne(p => p.UserProfile)
+                    .WithMany()
+                    .HasForeignKey(p => p.UserProfileId),
+                up =>
+                    up.HasKey(t => new { t.UserProfileId, t.PhotoId }));
     }
 }
