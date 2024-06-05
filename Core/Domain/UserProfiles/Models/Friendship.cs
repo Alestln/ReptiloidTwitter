@@ -18,11 +18,4 @@ public class Friendship : Entity
         UserId = userId;
         FriendId = friendId;
     }
-
-    public static Friendship Create(CreateFriendshipData data)
-    {
-        return new Friendship(
-            userId: data.UserId,
-            friendId: data.FriendId);
-    }
 }

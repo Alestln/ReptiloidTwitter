@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Application.Mappings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,6 @@ public static class ApplicationRegistration
         services.AddMediatR(cfg => 
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-        //services.AddAutoMapper(typeof().Assembly);
+        services.AddAutoMapper(typeof(UserProfileProfile).Assembly);
     }
 }

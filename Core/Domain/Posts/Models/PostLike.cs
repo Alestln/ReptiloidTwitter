@@ -19,11 +19,4 @@ public class PostLike : Entity
         PostId = postId;
         UserId = userId;
     }
-
-    public static PostLike Create(CreatePostLikeData data)
-    {
-        return new PostLike(
-            postId: data.PostId,
-            userId: data.UserId);
-    }
 }

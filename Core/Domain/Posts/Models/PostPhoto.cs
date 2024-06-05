@@ -19,11 +19,4 @@ public class PostPhoto : Entity
         PostId = postId;
         PhotoId = photoId;
     }
-
-    public static PostPhoto Create(CreatePostPhotoData data)
-    {
-        return new PostPhoto(
-            postId: data.PostId,
-            photoId: data.PhotoId);
-    }
 }

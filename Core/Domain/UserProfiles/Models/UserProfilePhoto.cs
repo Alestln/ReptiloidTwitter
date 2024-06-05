@@ -19,11 +19,4 @@ public class UserProfilePhoto : Entity
         UserProfileId = userProfileId;
         PhotoId = photoId;
     }
-
-    public static UserProfilePhoto Create(CreateUserProfilePhotoData data)
-    {
-        return new UserProfilePhoto(
-            userProfileId: data.UserProfileId,
-            photoId: data.PhotoId);
-    }
 }

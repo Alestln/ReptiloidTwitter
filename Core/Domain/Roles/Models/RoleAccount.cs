@@ -19,11 +19,4 @@ public class RoleAccount : Entity
         AccountId = accountId;
         RoleId = roleId;
     }
-
-    public static RoleAccount Create(CreateRoleAccountData data)
-    {
-        return new RoleAccount(
-            accountId: data.AccountId,
-            roleId: data.RoleId);
-    }
 }
