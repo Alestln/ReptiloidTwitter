@@ -1,4 +1,4 @@
-﻿using Application.Dtos.UserProfile;
+﻿using Application.Dtos.UserProfiles;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Core.Exceptions;

@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using Application.Dtos.UserProfile;
+using Application.Dtos.UserProfiles;
 using AutoMapper;
 using Core.Domain.UserProfiles.Models;
 

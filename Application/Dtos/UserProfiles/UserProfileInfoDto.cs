@@ -1,6 +1,4 @@
-﻿using System.Buffers.Text;
-
-namespace Application.Dtos.UserProfile;
+﻿namespace Application.Dtos.UserProfiles;
 
 public class UserProfileInfoDto
 {

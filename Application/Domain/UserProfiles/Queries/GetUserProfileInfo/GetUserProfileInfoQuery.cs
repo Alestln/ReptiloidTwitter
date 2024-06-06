@@ -1,4 +1,4 @@
-﻿using Application.Dtos.UserProfile;
+﻿using Application.Dtos.UserProfiles;
 using MediatR;
 
 namespace Application.Domain.UserProfiles.Queries.GetUserProfileInfo;
