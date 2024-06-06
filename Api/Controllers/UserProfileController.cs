@@ -10,7 +10,7 @@ namespace ReptiloidTwitter.Controllers;
 [Route("api/[controller]/[action]")]
 public class UserProfileController(IMediator mediator) : ApiControllerBase
 {
-    [HttpGet]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetInfo(
         [Required] Guid id,
         CancellationToken cancellationToken = default)
