@@ -16,7 +16,7 @@ public class Account : Entity
 
     public DateTime RegistrationDate  { get; private set; }
     
-    public ICollection<Role> Roles { get; private set; }
+    public ICollection<Role> Roles { get; private set; } = new List<Role>();
     
     private Account(Guid id, string username, string password, string email, DateTime registrationDate)
     {
@@ -35,5 +35,10 @@ public class Account : Entity
             password: data.Password,
             email: data.Email,
             registrationDate: DateTime.UtcNow);
+    }
+
+    public void AddRole(Role role)
+    {
+        Roles.Add(role);
     }
 }

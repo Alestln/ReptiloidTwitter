@@ -18,6 +18,16 @@ public class CreateAccountHandler(
 
         var account = Account.Create(data);
 
+        var userRoleTitle = "User";
+
+        var role = await socialDbContext.Roles
+            .FirstOrDefaultAsync(r => r.Title.Trim().ToLower() == userRoleTitle.Trim().ToLower(), cancellationToken);
+
+        if (role is null) 
+            throw new NullReferenceException($"User role is null. UserRoleTitle: {userRoleTitle}");
+        
+        account.AddRole(role);
+            
         socialDbContext.Entry(account).State = EntityState.Added;
         await socialDbContext.SaveChangesAsync(cancellationToken);
 
