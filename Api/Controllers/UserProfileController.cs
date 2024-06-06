@@ -18,7 +18,7 @@ public class UserProfileController(IMediator mediator) : ApiControllerBase
         try
         {
             var userProfile = await mediator.Send(new GetUserProfileInfoQuery(id), cancellationToken);
-
+            
             return Ok(userProfile);
         }
         catch (NotFoundException ex)

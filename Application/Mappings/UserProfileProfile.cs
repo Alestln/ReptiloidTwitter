@@ -1,4 +1,5 @@
-﻿using Application.Dtos.UserProfile;
+﻿using System.Globalization;
+using Application.Dtos.UserProfile;
 using AutoMapper;
 using Core.Domain.UserProfiles.Models;
 
@@ -10,6 +11,8 @@ public class UserProfileProfile : Profile
     {
         CreateProjection<UserProfile, UserProfileInfoDto>()
             .ForMember(d => d.PhotoFile, opt =>
-                opt.MapFrom(up => up.Avatar.File));
+                opt.MapFrom(up => up.Avatar.File))
+            .ForMember(d => d.BirthdayDate, opt =>
+                opt.MapFrom(up => up.BirthdayDate.HasValue ? up.BirthdayDate.Value.ToString("dd MMMM yyyy", new CultureInfo("uk-UA")) : null));
     }
 }

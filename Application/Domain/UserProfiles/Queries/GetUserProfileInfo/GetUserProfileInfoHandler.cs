@@ -20,7 +20,7 @@ public class GetUserProfileInfoHandler(
                 .Where(up => up.AccountId == request.Id)
                 .ProjectTo<UserProfileInfoDto>(mapper.ConfigurationProvider)
                 .SingleAsync(cancellationToken);
-
+            
             return userProfile;
         }
         catch (ArgumentNullException)

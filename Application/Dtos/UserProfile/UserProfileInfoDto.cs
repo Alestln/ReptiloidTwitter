@@ -10,7 +10,7 @@ public class UserProfileInfoDto
     
     public string? MiddleName { get; set; }
 
-    public DateTime? BirthdayDate { get; set; }
+    public string? BirthdayDate { get; set; }
 
     public string? Bio { get; set; }
 
