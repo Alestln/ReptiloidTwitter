@@ -30,12 +30,14 @@ public class CreateAccountHandler(
         if (role is null) 
             throw new NullReferenceException($"User role is null. UserRoleTitle: {userRoleTitle}");
 
+        var roleAccount = RoleAccount.Create(account.Id, role.Id);
+        
         var userProfileData = new CreateUserProfileData(account.Id, request.FirstName, request.LastName);
-
+        
         var userProfile = UserProfile.Create(userProfileData);
 
         socialDbContext.Entry(account).State = EntityState.Added;
-        socialDbContext.Entry(RoleAccount.Create(account.Id, role.Id)).State = EntityState.Added;
+        socialDbContext.Entry(roleAccount).State = EntityState.Added;
         socialDbContext.Entry(userProfile).State = EntityState.Added;
         
         await socialDbContext.SaveChangesAsync(cancellationToken);
