@@ -2,6 +2,7 @@
 using System.Security.Authentication;
 using Application.Domain.Accounts.Commands.CreateAccount;
 using Application.Domain.Accounts.Queries.GetAccount;
+using Application.Domain.RefreshTokens.Commands;
 using Application.Dtos.Accounts;
 using Application.Dtos.Authentication;
 using AutoMapper;
@@ -51,6 +52,12 @@ public class AuthenticationController(
             var account = await mediator.Send(query, cancellationToken);
             
             var authenticationResponse = authenticationService.GenerateTokens(account);
+
+            var command = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
+                authenticationResponse.RefreshTokenExpiration);
+
+            await mediator.Send(command, cancellationToken);
+            
             return Ok(authenticationResponse);
         }
         catch (AuthenticationException ex)

@@ -25,7 +25,7 @@ public class CreateAccountHandler(
 
         var role = await socialDbContext.Roles
             .Where(r => r.Title.Trim().ToLower() == userRoleTitle.Trim().ToLower())
-            .FirstOrDefaultAsync(cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken);
 
         if (role is null) 
             throw new NullReferenceException($"User role is null. UserRoleTitle: {userRoleTitle}");

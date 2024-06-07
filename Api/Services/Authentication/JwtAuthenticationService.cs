@@ -5,20 +5,25 @@ using System.Security.Cryptography;
 using Application.Dtos.Authentication;
 using Core.Domain.Accounts.Models;
 using Microsoft.IdentityModel.Tokens;
+using Persistence.Contexts;
 using ReptiloidTwitter.Configuration;
 
 namespace ReptiloidTwitter.Services.Authentication;
 
-public class JwtAuthenticationService(IConfiguration configuration) : IJwtAuthenticationService
+public class JwtAuthenticationService(
+    IConfiguration configuration,
+    SocialDbContext socialDbContext) : IJwtAuthenticationService
 {
     public AuthenticationResponse GenerateTokens(Account account)
     {
-        return new AuthenticationResponse
+        var authenticationResponse = new AuthenticationResponse
         {
             AccessToken = GenerateAccessToken(account),
             RefreshToken = GenerateRefreshToken(),
             RefreshTokenExpiration = DateTimeOffset.UtcNow.AddMinutes(2).ToUnixTimeSeconds()
         };
+        
+        return authenticationResponse;
     }
 
     private string GenerateAccessToken(Account account)

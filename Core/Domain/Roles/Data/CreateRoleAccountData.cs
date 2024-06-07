@@ -2,4 +2,4 @@
 
 public record CreateRoleAccountData(
     Guid AccountId,
-    int RoleId);
+    Guid RoleId);

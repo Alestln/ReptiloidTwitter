@@ -49,6 +49,22 @@ namespace Persistence.Migrations.Social
                     b.ToTable("Accounts", "Social");
                 });
 
+            modelBuilder.Entity("Core.Domain.Accounts.Models.RefreshToken", b =>
+                {
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("Expires")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Token");
+
+                    b.ToTable("RefreshTokens", "Social");
+                });
+
             modelBuilder.Entity("Core.Domain.Photos.Models.Photo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -158,11 +174,9 @@ namespace Persistence.Migrations.Social
 
             modelBuilder.Entity("Core.Domain.Roles.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -171,6 +185,18 @@ namespace Persistence.Migrations.Social
                     b.HasKey("Id");
 
                     b.ToTable("Roles", "Social");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9cd41c07-090f-4f39-bd72-e4cab367445e"),
+                            Title = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00e73241-8b69-4076-a7bd-734c6eb04767"),
+                            Title = "User"
+                        });
                 });
 
             modelBuilder.Entity("Core.Domain.Roles.Models.RoleAccount", b =>
@@ -178,8 +204,8 @@ namespace Persistence.Migrations.Social
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("AccountId", "RoleId");
 

@@ -1,21 +1,22 @@
-﻿using Core.Common;
+﻿namespace Core.Domain.Roles.Models;
 
-namespace Core.Domain.Roles.Models;
-
-public class Role : Entity
+public class Role
 {
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
 
     public string Title { get; private set; }
 
-    private Role(string title)
+    private Role(Guid id, string title)
     {
+        Id = id;
         Title = title;
     }
     
     public static Role Create(string title)
     {
-        return new Role(title: title);
+        return new Role(
+            id: Guid.NewGuid(),
+            title: title);
     }
 
     public void Update(string title)

@@ -25,6 +25,8 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
     public DbSet<Role> Roles { get; set; }
     
     public DbSet<RoleAccount> RoleAccount { get; set; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,5 +35,7 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
         modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
         modelBuilder.ApplyConfiguration(new PostConfiguration());
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
+        modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleConfiguration());
     }
 }
