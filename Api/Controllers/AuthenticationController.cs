@@ -47,7 +47,7 @@ public class AuthenticationController(
     {
         try
         {
-            var query = new GetAccountByLoginQuery(request.Username, request.Password);
+            var query = new GetAccountByLoginQuery(request.Login, request.Password);
             var account = await mediator.Send(query, cancellationToken);
             
             var authenticationResponse = authenticationService.GenerateTokens(account);
