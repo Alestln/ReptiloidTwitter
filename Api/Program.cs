@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using ReptiloidTwitter.Configuration;
+using ReptiloidTwitter.Services.Authentication;
 
 namespace ReptiloidTwitter;
 
@@ -25,6 +26,8 @@ public class Program
                 policy.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()));
+
+        builder.Services.AddScoped<IJwtAuthenticationService, JwtAuthenticationService>();
         
         builder.Services.AddApplicationServices(builder.Configuration);
         builder.Services.AddPersistenceServices(builder.Configuration);
@@ -55,7 +58,7 @@ public class Program
         }
         else
         {
-            throw new AuthenticationException($"JwtCredentials is null");
+            throw new AuthenticationException($"JwtCredentials is null. Place of error: {nameof(Program)}");
         }
         
         var app = builder.Build();

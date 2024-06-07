@@ -6,6 +6,8 @@ namespace Core.Domain.Accounts.Models;
 
 public class Account : Entity
 {
+    private readonly List<Role> _roles = new List<Role>(); 
+    
     public Guid Id { get; private set; }
 
     public string Username { get; private set; }
@@ -16,8 +18,8 @@ public class Account : Entity
 
     public DateTime RegistrationDate  { get; private set; }
     
-    public ICollection<Role> Roles { get; private set; } = new List<Role>();
-    
+    public IReadOnlyCollection<Role> Roles => _roles;
+
     private Account(Guid id, string username, string password, string email, DateTime registrationDate)
     {
         Id = id;
@@ -35,10 +37,5 @@ public class Account : Entity
             password: data.Password,
             email: data.Email,
             registrationDate: DateTime.UtcNow);
-    }
-
-    public void AddRole(Role role)
-    {
-        Roles.Add(role);
     }
 }

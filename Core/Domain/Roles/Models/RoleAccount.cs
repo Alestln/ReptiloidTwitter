@@ -12,4 +12,15 @@ public class RoleAccount : Entity
     public Account Account { get; private set; }
     
     public Role Role { get; private set; }
+
+    public RoleAccount(Guid accountId, int roleId)
+    {
+        AccountId = accountId;
+        RoleId = roleId;
+    }
+
+    public static RoleAccount Create(Guid accountId, int roleId)
+    {
+        return new RoleAccount(accountId, roleId);
+    }
 }

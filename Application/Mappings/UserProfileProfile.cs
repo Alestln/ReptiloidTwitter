@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using Application.Dtos.UserProfiles;
 using AutoMapper;
+using Core.Domain.Accounts.Data;
+using Core.Domain.UserProfiles.Data;
 using Core.Domain.UserProfiles.Models;
 
 namespace Application.Mappings;

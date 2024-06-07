@@ -24,6 +24,8 @@ public class SocialDbContext(DbContextOptions<SocialDbContext> options) : DbCont
     
     public DbSet<Role> Roles { get; set; }
     
+    public DbSet<RoleAccount> RoleAccount { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(DbSchema);

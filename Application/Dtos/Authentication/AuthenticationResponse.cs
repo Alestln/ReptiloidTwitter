@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos.Accounts;
+﻿namespace Application.Dtos.Authentication;
 
 public class AuthenticationResponse
 {
@@ -6,5 +6,5 @@ public class AuthenticationResponse
 
     public string RefreshToken { get; set; }
 
-    public int RefreshTokenExpiration { get; set; }
+    public long RefreshTokenExpiration { get; set; }
 }
