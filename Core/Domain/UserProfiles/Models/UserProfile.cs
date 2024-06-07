@@ -25,9 +25,9 @@ public class UserProfile : Entity
 
     public Photo Avatar { get; private set; }
 
-    public ICollection<UserProfile> Friends { get; private set; }
+    public IReadOnlyCollection<UserProfile> Friends { get; private set; }
     
-    public ICollection<Photo> Photos { get; private set; }
+    public IReadOnlyCollection<Photo> Photos { get; private set; }
     
     private UserProfile(
         Guid accountId,
