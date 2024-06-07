@@ -8,7 +8,6 @@ using Application.Dtos.Authentication;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Persistence.Contexts;
 using ReptiloidTwitter.Common;
 using ReptiloidTwitter.Services.Authentication;
 
@@ -16,14 +15,13 @@ namespace ReptiloidTwitter.Controllers;
 
 [Route("api/[controller]/[action]")]
 public class AuthenticationController(
-    SocialDbContext socialDbContext,
     IMediator mediator,
     IMapper mapper,
     IJwtAuthenticationService authenticationService) : ApiControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Register(
-        [Required] CreateAccountDto model,
+        [FromBody] [Required] CreateAccountDto model,
         CancellationToken cancellationToken = default)
     {
         try
@@ -64,5 +62,15 @@ public class AuthenticationController(
         {
             return Unauthorized(ex.Message);
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Logout(
+        [Required] Guid accountId,
+        CancellationToken cancellationToken = default)
+    {
+        await authenticationService.InvalidateTokensAsync(accountId, cancellationToken);
+
+        return Ok();
     }
 }

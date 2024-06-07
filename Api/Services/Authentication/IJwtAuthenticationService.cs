@@ -6,4 +6,6 @@ namespace ReptiloidTwitter.Services.Authentication;
 public interface IJwtAuthenticationService
 {
     AuthenticationResponse GenerateTokens(Account account);
+
+    Task InvalidateTokensAsync(Guid accountId, CancellationToken cancellationToken);
 }

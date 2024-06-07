@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Application.Dtos.Authentication;
 using Core.Domain.Accounts.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Persistence.Contexts;
 using ReptiloidTwitter.Configuration;
@@ -24,6 +25,17 @@ public class JwtAuthenticationService(
         };
         
         return authenticationResponse;
+    }
+
+    public async Task InvalidateTokensAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        var tokens = await socialDbContext.RefreshTokens
+            .Where(r => r.AccountId == accountId)
+            .ToListAsync(cancellationToken);
+        
+        socialDbContext.RefreshTokens.RemoveRange(tokens);
+        
+        await socialDbContext.SaveChangesAsync(cancellationToken);
     }
 
     private string GenerateAccessToken(Account account)
