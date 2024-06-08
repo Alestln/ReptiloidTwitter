@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
-namespace Application.Domain.RefreshTokens.Commands;
+namespace Application.Domain.RefreshTokens.Commands.CreateRefreshToken;
 
 public class CreateRefreshTokenHandler(SocialDbContext socialDbContext) : IRequestHandler<CreateRefreshTokenCommand, Unit>
 {

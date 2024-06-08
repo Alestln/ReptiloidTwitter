@@ -3,6 +3,8 @@ using System.Security.Authentication;
 using Application.Domain.Accounts.Commands.CreateAccount;
 using Application.Domain.Accounts.Queries.GetAccount;
 using Application.Domain.RefreshTokens.Commands;
+using Application.Domain.RefreshTokens.Commands.CreateRefreshToken;
+using Application.Domain.RefreshTokens.Commands.UpdateRefreshToken;
 using Application.Dtos.Accounts;
 using Application.Dtos.Authentication;
 using AutoMapper;
@@ -29,9 +31,14 @@ public class AuthenticationController(
             var command = mapper.Map<CreateAccountCommand>(model);
             var account = await mediator.Send(command, cancellationToken);
 
-            var response = authenticationService.GenerateTokens(account);
+            var authenticationResponse = authenticationService.GenerateTokens(account);
+            
+            var createRefreshTokenCommand = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
+                authenticationResponse.RefreshTokenExpiration);
 
-            return Ok(response);
+            await mediator.Send(createRefreshTokenCommand, cancellationToken);
+            
+            return Ok(authenticationResponse);
         }
         catch (AuthenticationException ex)
         {
@@ -48,13 +55,26 @@ public class AuthenticationController(
         {
             var query = new GetAccountByLoginQuery(request.Login, request.Password);
             var account = await mediator.Send(query, cancellationToken);
-            
+
             var authenticationResponse = authenticationService.GenerateTokens(account);
+            
+            if (string.IsNullOrWhiteSpace(request.RefreshToken))
+            {
+                var createCommand = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
+                    authenticationResponse.RefreshTokenExpiration);
 
-            var command = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
-                authenticationResponse.RefreshTokenExpiration);
+                await mediator.Send(createCommand, cancellationToken);
+            }
+            else
+            {
+                var updateCommand = new UpdateRefreshTokenCommand(
+                    account.Id, 
+                    request.RefreshToken,
+                    authenticationResponse.RefreshToken,
+                    authenticationResponse.RefreshTokenExpiration);
 
-            await mediator.Send(command, cancellationToken);
+                await mediator.Send(updateCommand, cancellationToken);
+            }
             
             return Ok(authenticationResponse);
         }
@@ -64,12 +84,12 @@ public class AuthenticationController(
         }
     }
 
-    [HttpGet]
+    [HttpGet("{accountId:guid}")]
     public async Task<IActionResult> Logout(
         [Required] Guid accountId,
         CancellationToken cancellationToken = default)
     {
-        await authenticationService.InvalidateTokensAsync(accountId, cancellationToken);
+        //await authenticationService.InvalidateTokensAsync(accountId, cancellationToken);
 
         return Ok();
     }

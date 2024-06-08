@@ -24,4 +24,10 @@ public class RefreshToken
             accountId: data.AccountId,
             expires: data.Expires);
     }
+
+    public void Update(string token, long expires)
+    {
+        Token = token;
+        Expires = expires;
+    }
 }

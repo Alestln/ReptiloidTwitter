@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Domain.RefreshTokens.Commands;
+namespace Application.Domain.RefreshTokens.Commands.CreateRefreshToken;
 
 public record CreateRefreshTokenCommand(
     string RefreshToken,
