@@ -10,6 +10,8 @@ public class RefreshToken
 
     public long Expires { get; private set; }
 
+    public Account Account { get; private set; }
+
     private RefreshToken(string token, Guid accountId, long expires)
     {
         Token = token;
