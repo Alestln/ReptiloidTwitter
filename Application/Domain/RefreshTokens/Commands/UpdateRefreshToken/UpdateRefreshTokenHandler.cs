@@ -1,4 +1,6 @@
-﻿using Core.Exceptions;
+﻿using Core.Domain.Accounts.Data;
+using Core.Domain.Accounts.Models;
+using Core.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
@@ -11,14 +13,22 @@ public class UpdateRefreshTokenHandler(SocialDbContext socialDbContext) : IReque
     {
         try
         {
-            var refreshToken = await socialDbContext.RefreshTokens
+            var oldRefreshToken = await socialDbContext.RefreshTokens
                 .Where(r => r.AccountId == request.AccountId
                             && r.Token == request.OldRefreshToken)
                 .SingleAsync(cancellationToken);
-            
-            refreshToken.Update(request.NewRefreshToken, request.NewExpires);
 
-            socialDbContext.Entry(refreshToken).State = EntityState.Modified;
+            socialDbContext.Entry(oldRefreshToken).State = EntityState.Deleted;
+
+            var newRefreshTokenData = new CreateRefreshTokenData(
+                request.NewRefreshToken,
+                request.AccountId,
+                request.NewExpires);
+
+            var newRefreshToken = RefreshToken.Create(newRefreshTokenData);
+
+            socialDbContext.Entry(newRefreshToken).State = EntityState.Added;
+            
             await socialDbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
