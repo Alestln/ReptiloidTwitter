@@ -1,14 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Authentication;
+using System.Security.Claims;
 using Application.Domain.Accounts.Commands.CreateAccount;
 using Application.Domain.Accounts.Queries.GetAccount;
-using Application.Domain.RefreshTokens.Commands;
 using Application.Domain.RefreshTokens.Commands.CreateRefreshToken;
-using Application.Domain.RefreshTokens.Commands.UpdateRefreshToken;
+using Application.Domain.RefreshTokens.Commands.DeleteRefreshToken;
+using Application.Domain.RefreshTokens.Queries.GetRefreshToken;
 using Application.Dtos.Accounts;
 using Application.Dtos.Authentication;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReptiloidTwitter.Common;
 using ReptiloidTwitter.Services.Authentication;
@@ -58,23 +60,10 @@ public class AuthenticationController(
 
             var authenticationResponse = authenticationService.GenerateTokens(account);
             
-            if (string.IsNullOrWhiteSpace(request.RefreshToken))
-            {
-                var createCommand = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
-                    authenticationResponse.RefreshTokenExpiration);
+            var createCommand = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
+                authenticationResponse.RefreshTokenExpiration);
 
-                await mediator.Send(createCommand, cancellationToken);
-            }
-            else
-            {
-                var updateCommand = new UpdateRefreshTokenCommand(
-                    account.Id, 
-                    request.RefreshToken,
-                    authenticationResponse.RefreshToken,
-                    authenticationResponse.RefreshTokenExpiration);
-
-                await mediator.Send(updateCommand, cancellationToken);
-            }
+            await mediator.Send(createCommand, cancellationToken);
             
             return Ok(authenticationResponse);
         }
@@ -84,12 +73,48 @@ public class AuthenticationController(
         }
     }
 
-    [HttpGet("{accountId:guid}")]
-    public async Task<IActionResult> Logout(
-        [Required] Guid accountId,
+    [HttpPost]
+    public async Task<IActionResult> Refresh(
+        [FromBody] RefreshTokenRequestModel model,
         CancellationToken cancellationToken = default)
     {
-        //await authenticationService.InvalidateTokensAsync(accountId, cancellationToken);
+        var query = new GetRefreshTokenQuery(model.RefreshToken);
+        var refreshToken = await mediator.Send(query, cancellationToken);
+
+        if (refreshToken is null)
+        {
+            return Unauthorized("Incorrect refresh token.");
+        }
+
+        var account = refreshToken.Account;
+
+        var deleteCommand = new DeleteRefreshTokenCommand(refreshToken);
+        await mediator.Send(deleteCommand, cancellationToken);
+
+        var authenticationResponse = authenticationService.GenerateTokens(account);
+
+        var createCommand = new CreateRefreshTokenCommand(
+            authenticationResponse.RefreshToken,
+            account.Id,
+            authenticationResponse.RefreshTokenExpiration);
+
+        await mediator.Send(createCommand, cancellationToken);
+
+        return Ok(authenticationResponse);
+    }
+    
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Logout(
+        CancellationToken cancellationToken = default)
+    {
+        var accountIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (accountIdClaim is null || !Guid.TryParse(accountIdClaim.Value, out var accountId))
+        {
+            return BadRequest("Failed to get user ID from token.");
+        }
+        
+        await authenticationService.InvalidateTokensAsync(accountId, cancellationToken);
 
         return Ok();
     }
