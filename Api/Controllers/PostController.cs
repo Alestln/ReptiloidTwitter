@@ -11,10 +11,10 @@ public class PostController(IMediator mediator) : ApiControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetPostsByUserId(
-        [Required] Guid userProfileId,
+        [Required] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetUserPostsQuery(userProfileId);
+        var query = new GetUserPostsQuery(id);
         var posts = await mediator.Send(query, cancellationToken);
         
         return Ok(posts);
