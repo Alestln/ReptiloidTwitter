@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.Domain.RefreshTokens.Commands.DeleteRefreshToken;
 
-public record DeleteRefreshTokenCommand(RefreshToken RefreshToken) : IRequest<Unit>;
+public record DeleteRefreshTokenCommand(string RefreshToken) : IRequest<Unit>;

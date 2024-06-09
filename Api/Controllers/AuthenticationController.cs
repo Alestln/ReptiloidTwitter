@@ -9,6 +9,7 @@ using Application.Domain.RefreshTokens.Queries.GetRefreshToken;
 using Application.Dtos.Accounts;
 using Application.Dtos.Authentication;
 using AutoMapper;
+using Core.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -87,20 +88,28 @@ public class AuthenticationController(
         }
 
         var account = refreshToken.Account;
+        
+        var accessToken = authenticationService.UpdateAccessToken(account);
 
-        var deleteCommand = new DeleteRefreshTokenCommand(refreshToken);
-        await mediator.Send(deleteCommand, cancellationToken);
+        return Ok(accessToken);
+    }
 
-        var authenticationResponse = authenticationService.GenerateTokens(account);
+    [HttpPost]
+    public async Task<IActionResult> DeleteRefreshToken(
+        [FromBody] RefreshTokenRequestModel model,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var deleteCommand = new DeleteRefreshTokenCommand(model.RefreshToken);
+            await mediator.Send(deleteCommand, cancellationToken);
 
-        var createCommand = new CreateRefreshTokenCommand(
-            authenticationResponse.RefreshToken,
-            account.Id,
-            authenticationResponse.RefreshTokenExpiration);
-
-        await mediator.Send(createCommand, cancellationToken);
-
-        return Ok(authenticationResponse);
+            return Ok();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
     
     [Authorize]

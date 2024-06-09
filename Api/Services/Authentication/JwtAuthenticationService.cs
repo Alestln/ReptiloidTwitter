@@ -20,11 +20,21 @@ public class JwtAuthenticationService(
         var authenticationResponse = new AuthenticationResponse
         {
             AccessToken = GenerateAccessToken(account),
+            AccessTokenExpiration = DateTimeOffset.UtcNow.AddSeconds(25).ToUnixTimeSeconds(),
             RefreshToken = GenerateRefreshToken(),
             RefreshTokenExpiration = DateTimeOffset.UtcNow.AddMinutes(2).ToUnixTimeSeconds()
         };
         
         return authenticationResponse;
+    }
+
+    public AccessToken UpdateAccessToken(Account account)
+    {
+        return new AccessToken()
+        {
+            Token = GenerateAccessToken(account),
+            Expires = DateTimeOffset.UtcNow.AddSeconds(25).ToUnixTimeSeconds()
+        };
     }
 
     public async Task InvalidateTokensAsync(Guid accountId, CancellationToken cancellationToken)
@@ -37,35 +47,34 @@ public class JwtAuthenticationService(
         
         await socialDbContext.SaveChangesAsync(cancellationToken);
     }
-
+    
     private string GenerateAccessToken(Account account)
     {
-        var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.UniqueName, account.Username),
-            new Claim(JwtRegisteredClaimNames.Email, account.Email)
-        };
-
-        foreach (var role in account.Roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role.Title));
-        }
-
         var jwtCredentials = configuration.GetSection("Jwt").Get<JwtCredentials>();
-
+        
         if (jwtCredentials is not null)
         {
             var credentials = new SigningCredentials(jwtCredentials.SecurityKey, SecurityAlgorithms.HmacSha256);
-
+            
+            var claims = new List<Claim>
+            {
+                new(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
+                new(JwtRegisteredClaimNames.UniqueName, account.Username),
+                new(JwtRegisteredClaimNames.Email, account.Email)
+            };
+        
+            claims.AddRange(account.Roles.Select(role => new Claim(ClaimTypes.Role, role.Title)));
+            
             var token = new JwtSecurityToken(
                 issuer: jwtCredentials.Issuer,
                 audience: jwtCredentials.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1),
-                signingCredentials: credentials);
+                expires: DateTime.UtcNow.AddSeconds(30),
+                signingCredentials: credentials
+            );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(token);
         }
 
         throw new AuthenticationException(

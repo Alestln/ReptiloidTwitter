@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.Exceptions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 
@@ -8,9 +9,24 @@ public class DeleteRefreshTokenHandler(SocialDbContext socialDbContext) : IReque
 {
     public async Task<Unit> Handle(DeleteRefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        socialDbContext.Entry(request.RefreshToken).State = EntityState.Deleted;
-        await socialDbContext.SaveChangesAsync(cancellationToken);
-        
-        return Unit.Value;
+        try
+        {
+            var refreshToken = await socialDbContext.RefreshTokens
+                .Where(r => r.Token == request.RefreshToken)
+                .SingleAsync(cancellationToken);
+
+            socialDbContext.Entry(refreshToken).State = EntityState.Deleted;
+            await socialDbContext.SaveChangesAsync(cancellationToken);
+
+            return Unit.Value;
+        }
+        catch (ArgumentNullException)
+        {
+            throw new NotFoundException($"Refresh token is null. Token: {request.RefreshToken}");
+        }
+        catch (InvalidOperationException)
+        {
+            throw new NotFoundException($"DB contains more than one elements or contains no elements. Token: {request.RefreshToken}");
+        }
     }
 }
