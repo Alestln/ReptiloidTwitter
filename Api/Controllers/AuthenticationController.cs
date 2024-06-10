@@ -87,15 +87,23 @@ public class AuthenticationController(
             return Unauthorized("Incorrect refresh token.");
         }
 
+        var deleteCommand = new DeleteRefreshTokenCommand(model.RefreshToken);
+        await mediator.Send(deleteCommand, cancellationToken);
+        
         var account = refreshToken.Account;
         
-        var accessToken = authenticationService.UpdateAccessToken(account);
+        var authenticationResponse = authenticationService.GenerateTokens(account);
+        
+        var createCommand = new CreateRefreshTokenCommand(authenticationResponse.RefreshToken, account.Id,
+            authenticationResponse.RefreshTokenExpiration);
 
-        return Ok(accessToken);
+        await mediator.Send(createCommand, cancellationToken);
+
+        return Ok(authenticationResponse);
     }
 
     [HttpPost]
-    public async Task<IActionResult> DeleteRefreshToken(
+    public async Task<IActionResult> Logout(
         [FromBody] RefreshTokenRequestModel model,
         CancellationToken cancellationToken = default)
     {
@@ -114,7 +122,7 @@ public class AuthenticationController(
     
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> Logout(
+    public async Task<IActionResult> LogoutFromAllDevices(
         CancellationToken cancellationToken = default)
     {
         var accountIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
