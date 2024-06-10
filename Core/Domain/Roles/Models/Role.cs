@@ -12,13 +12,6 @@ public class Role
         Title = title;
     }
     
-    public static Role Create(string title)
-    {
-        return new Role(
-            id: Guid.NewGuid(),
-            title: title);
-    }
-
     public void Update(string title)
     {
         Title = title;
